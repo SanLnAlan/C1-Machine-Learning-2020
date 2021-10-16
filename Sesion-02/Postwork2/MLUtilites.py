@@ -77,8 +77,15 @@ def separation_k_fold(data,K,aleatorio=True):
 # • Funciones de evaluación con matriz de confusión.
 def matrix_confusion(y_esperada,y_predicha):
     result = confusion_matrix(y_esperada,y_predicha)
+    [TN, FP, FN, TP] = result.ravel()
+    return [TN, FP, FN, TP]
 
 # • Funciones de obtención de Precisión (Accuracy), Sensibilidad y Especificidad.
+def results_matrix_confusion(TN, FP, FN, TP):
+    accuracy = (TP / (TP + FP) ) * 100
+    sensitivity = (TP / (TP + FN) ) * 100
+    specificity = (TN / (TN + FP) ) * 100
+    return accuracy, sensitivity, specificity
 
 
 # • Funciones que comparen dos clasificadores: 
@@ -87,3 +94,26 @@ def matrix_confusion(y_esperada,y_predicha):
 #     ◦ Digas cual es mejor en terminos de precisión
 #     ◦ Digas cual es mejor en términos de sensibilidad
 #     ◦ Digas cual es mejor en términos de especificidad.
+
+def clasification_comparative(y_esperada1,y_predicha1,y_esperada2,y_predicha2):
+    accuracy = []
+    sensitivity = []
+    specificity = []
+    [TN, FP, FN, TP] = matrix_confusion(y_esperada1,y_predicha1)
+    accuracy[0], sensitivity[0], specificity[0] = results_matrix_confusion(TN, FP, FN, TP)
+    [TN, FP, FN, TP] = matrix_confusion(y_esperada2,y_predicha2)
+    accuracy[1], sensitivity[1], specificity[1] = results_matrix_confusion(TN, FP, FN, TP)
+    if accuracy[0] > accuracy[1]:
+        print('Clasficador 1 es mejor que clasificador 2 en cuanto a precisión: {accuracy[0]} > {accuracy[1]}')
+    else:
+        print('Clasficador 2 es mejor que clasificador 1 en cuanto a precisión: {accuracy[1]} < {accuracy[0]}')
+
+    if sensitivity[0] > sensitivity[1]:
+        print('Clasficador 1 es mejor que clasificador 2 en cuanto a sensibilidad: {sensitivity[0]} > {sensitivity[1]}')
+    else:
+        print('Clasficador 2 es mejor que clasificador 1 en cuanto a sensibilidad: {sensitivity[1]} < {sensitivity[0]}')
+
+    if specificity[0] > specificity[1]:
+        print('Clasficador 1 es mejor que clasificador 2 en cuanto a specificidad: {specificity[0]} > {specificity[1]}')
+    else:
+        print('Clasficador 2 es mejor que clasificador 1 en cuanto a specificidad: {specificity[1]} < {specificity[0]}')
